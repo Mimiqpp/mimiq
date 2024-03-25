@@ -79,9 +79,23 @@ struct state_vector {
                 int bit = (i >> j) & 1;
                 binaryString += (bit == 0) ? '0' : '1';
             }
-            std::cout << binaryString << " => probability: " << coeffs[i].amplitude() * 100 << "% ( " << coeffs[i].real << " |0> + " << coeffs[i].complex << " i |1> )\n";
+            std::cout << binaryString << " =>" << coeffs[i].amplitude() * 100 << "% ( " << coeffs[i].real << " |0> + " << coeffs[i].complex << " i |1> )\n";
         }
         std::cout << std::endl;
+    }
+    void printprobs()
+    {
+        int cnd = 1 << n_qbits ;
+        for(int bit = 0; bit <  n_qbits ; bit++)
+        {
+            auto tmask = 1 << (n_qbits - 1 - bit);
+            double prob = 0.0;
+            for(int i = 0; i < cnd; i++)
+                if(i & tmask) prob += coeffs[i].amplitude();
+            std::cout << "for qbit " << bit << ": " <<"Prob of |1> : " << prob << ",  ";
+            std::cout << "Prob of |0> : " << 1 - prob << std::endl;
+        }
+        std::cout<<std::endl;
     }
 };
 struct result {
@@ -102,6 +116,10 @@ struct result {
             std::cout << binaryString << ": " << i -> second << std::endl;
         }
         std::cout << std::endl;
+    }
+    void get_probs()
+    {
+        state.printprobs();
     }
 };
 std::vector < std::vector < Coeff >> ma1, ma2, ma3;
